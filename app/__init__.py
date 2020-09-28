@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from config import Config
 
 app = Flask(__name__)
-db = SQLAlchemy(app)
+db = SQLAlchemy(app) 
 login_manager = LoginManager()
 login_manager.init_app(app)
 bootstrap = Bootstrap(app)
@@ -18,9 +18,12 @@ login_manager.login_message_category = 'info'
 
 
 def create_app():
+    app = Flask(__name__)
     app.config.from_object(Config)
     from .auth import auth as auth_blueprint
     from .main import main as main_blueprint
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(main_blueprint)
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
     return app
